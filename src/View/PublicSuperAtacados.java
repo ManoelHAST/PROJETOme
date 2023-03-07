@@ -4,6 +4,7 @@
  */
 package View;
 
+import static java.lang.System.exit;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -12,13 +13,15 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author astru
  */
-public class PublicSuperAtacados extends javax.swing.JFrame {
+public final class PublicSuperAtacados extends javax.swing.JFrame {
 
     /**
      * Creates new form PublicSuperAtacados
      */
     public int parar =0;
-    public int ult=0;
+    public int confir = 0;
+    public double ult=0;
+    public double dinheiro =0;
     public PublicSuperAtacados() {
         initComponents();
         //dados cliente
@@ -32,19 +35,6 @@ public class PublicSuperAtacados extends javax.swing.JFrame {
 }
     
   
-public void somarValores() {
-    try {
-        double somaTotal = 0;
-        for (int i = 1; i <= tabela.getRowCount(); i++) {
-
-            somaTotal += Double.parseDouble(tabela.getValueAt(i, 4).toString());
-            //AQUI VC JOGA PRO JTEXTFIELD
-            max.setText("Subtotal: " + somaTotal);
-        }
-    } catch (NumberFormatException e) {
-        System.out.println("Erro ao somar: " + e.getMessage());
-    }
-}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -58,8 +48,8 @@ public void somarValores() {
         add = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         max = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
+        troco = new javax.swing.JLabel();
+        confirmar = new javax.swing.JButton();
         precos = new javax.swing.JTextField();
         quants = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
@@ -69,6 +59,8 @@ public void somarValores() {
         jScrollPane1 = new javax.swing.JScrollPane();
         tabela = new javax.swing.JTable();
         jButton4 = new javax.swing.JButton();
+        op = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
@@ -93,6 +85,11 @@ public void somarValores() {
 
         jButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton2.setText("Adicionar forma de pagamento");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton2);
         jButton2.setBounds(20, 400, 260, 30);
 
@@ -101,20 +98,20 @@ public void somarValores() {
         jPanel1.add(max);
         max.setBounds(340, 440, 160, 80);
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel2.setText("Troco:");
-        jPanel1.add(jLabel2);
-        jLabel2.setBounds(640, 450, 150, 70);
+        troco.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        troco.setText("Troco:");
+        jPanel1.add(troco);
+        troco.setBounds(640, 450, 150, 70);
 
-        jButton3.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jButton3.setText("Cancelar compra");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        confirmar.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        confirmar.setText("Confirmar");
+        confirmar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                confirmarActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton3);
-        jButton3.setBounds(760, 520, 230, 39);
+        jPanel1.add(confirmar);
+        confirmar.setBounds(340, 520, 230, 39);
         jPanel1.add(precos);
         precos.setBounds(100, 280, 230, 30);
         jPanel1.add(quants);
@@ -167,7 +164,19 @@ public void somarValores() {
             }
         });
         jPanel1.add(jButton4);
-        jButton4.setBounds(20, 510, 270, 39);
+        jButton4.setBounds(20, 520, 270, 39);
+        jPanel1.add(op);
+        op.setBounds(100, 190, 230, 16);
+
+        jButton5.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jButton5.setText("Cancelar compra");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton5);
+        jButton5.setBounds(760, 520, 230, 39);
 
         getContentPane().add(jPanel1);
         jPanel1.setBounds(0, 0, 1000, 600);
@@ -181,8 +190,6 @@ public void somarValores() {
             
         
             String nome=nomes.getText().trim();
-            String precoshow=precos.getText();
-            String quantshow=quants.getText();
             double preco=Double.parseDouble(precos.getText());
             int quant = Integer.parseInt(quants.getText());
             double conta1 = preco * quant;
@@ -191,16 +198,16 @@ public void somarValores() {
             
             DefaultTableModel val = (DefaultTableModel) tabela.getModel();
             
-            val.addRow(new String[]{nome,"R$"+precoshow,"x"+quantshow,"R$"+res});
+            val.addRow(new String[]{nome,"R$"+preco,"x"+quant,res});
             
             nomes.setText("");
             precos.setText("");
             quants.setText("");
             
             nomes.requestFocus();
-            ult = (int) (ult +  conta1);
+            ult = ult +  conta1;
+            max.setText("Subtotal: "+ult);
             
-            somarValores();
         
     }//GEN-LAST:event_addActionPerformed
 
@@ -208,18 +215,67 @@ public void somarValores() {
 
     }//GEN-LAST:event_addMouseClicked
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        parar++;
-        ult=0;
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void confirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmarActionPerformed
+        if(confir != 1){
+        JOptionPane.showMessageDialog(null, "Por favor, degite uma forma de pagamento");
+        }else{
+        JOptionPane.showMessageDialog(null,"Pagamento Concluido");
+        exit(0);
+        }
+        
+    }//GEN-LAST:event_confirmarActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        int posicao = tabela.getSelectedRow();
-        tabela.remove(posicao);
         
+        if(tabela.getSelectedRow() != -1){
+        String codigo = (String) tabela.getValueAt(tabela.getSelectedRow(), 3);
+        double codigos=Double.parseDouble(codigo);
+        ult = ult - codigos;
+        max.setText("Subtotal: "+ult);
+        DefaultTableModel val = (DefaultTableModel) tabela.getModel();
+        val.removeRow(tabela.getSelectedRow());
+        
+        }else{
+        JOptionPane.showMessageDialog(null, "Selecione um produto para excluir");
+        }
         
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        String escolha = JOptionPane.showInputDialog(null,"Digite qual sua forma de pagamento: \n1 - Crédito \n2 - Débito \n3 - PIX \n 4 - Dinheiro");
+        int x = Integer.parseInt(escolha);
+        if(x ==1){
+        op.setText("Opção Selecionada: Crédito");
+        troco.setText("Troco: 0.0");
+        confir = 1;
+        }else if(x ==2){
+            op.setText("Opção Selecionada: Dédito");
+            troco.setText("Troco: 0.0");
+            confir = 1;
+        }else if(x==3){
+        op.setText("Opção Selecionada: PIX");
+        troco.setText("Troco: 0.0");
+        confir = 1;
+        }else if(x==4){
+        op.setText("Opção Selecionada: Dinheiro");
+        String digitar = JOptionPane.showInputDialog(null,"Digite o valor do pagamento: ");
+        double y = Double.parseDouble(digitar);
+        dinheiro = y - ult;
+        if(y < ult){
+        JOptionPane.showMessageDialog(null,"Dinheiro insuficiente");
+        }else{
+        troco.setText(""+dinheiro);
+        confir = 1;
+        }
+        }else{
+        JOptionPane.showMessageDialog(null,"Opção inválida");
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -258,10 +314,10 @@ public void somarValores() {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
+    private javax.swing.JButton confirmar;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -269,8 +325,10 @@ public void somarValores() {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel max;
     private javax.swing.JTextField nomes;
+    private javax.swing.JLabel op;
     private javax.swing.JTextField precos;
     private javax.swing.JTextField quants;
     private javax.swing.JTable tabela;
+    private javax.swing.JLabel troco;
     // End of variables declaration//GEN-END:variables
 }
