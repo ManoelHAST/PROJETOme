@@ -4,6 +4,7 @@
  */
 package Main;
 
+import View.PublicSuperAtacados;
 /**
  *
  * @author astru
@@ -11,7 +12,6 @@ package Main;
 public class main {
 
     public static void main(String[] args) {
-        
-    }
-    
-}
+        PublicSuperAtacados tp =new PublicSuperAtacados();
+        tp.setVisible(true);
+    }}
